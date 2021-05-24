@@ -1,12 +1,22 @@
-const router = require("express").Router();
-const userRoutes = require("./users");
+const Forum = require("../models/forum");
+const User = require("../models/user");
 
-router.get("/", (req, res) => {
-  res.status(200).json({
-    status: true,
-    message: "get list of users",
-    data: [],
-  });
+const router = require("express").Router();
+
+router.get("/", async (req, res) => {
+  try {
+    const users = await User.findAll({include: Forum});
+    
+    // console.log(users)
+
+    res.status(200).json({
+      status: true,
+      message: "get list of users",
+      data: users,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 router.get("/:id", (req, res) => {
